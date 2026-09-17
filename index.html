@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover, user-scalable=no" />
+<meta name="theme-color" content="#0d0914" />
+<title>Um Agradecimento Especial</title>
+<style>
+  :root{
+    --bg-1:#2a1636;
+    --bg-2:#0b0711;
+    --rose:#ff4d8d;
+    --rose-deep:#f50057;
+    --aqua:#79e4ff;
+    --glow:0;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+  html,body{height:100%;}
+
+  body{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    background:
+      radial-gradient(120% 80% at 50% 12%, var(--bg-1) 0%, var(--bg-2) 70%),
+      var(--bg-2);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    color:#fff;
+    touch-action:none;
+    user-select:none;
+    -webkit-user-select:none;
+    overscroll-behavior:none;
+  }
+
+  /* estrelinhas de fundo */
+  .stars{position:absolute;inset:0;pointer-events:none;opacity:.5;}
+  .star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;animation:twinkle 3.2s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:.75;transform:scale(1.25)}}
+
+  .stage{
+    position:relative;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:calc(var(--safe-top) + 18px) 16px calc(var(--safe-bottom) + 14px);
+  }
+
+  header{text-align:center;z-index:3;}
+  header h1{
+    font-size:clamp(1.05rem,5vw,1.45rem);
+    font-weight:600;
+    letter-spacing:.4px;
+    background:linear-gradient(90deg,#ffd6e6,#ffffff 45%,#cfeeff);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  #hint{
+    font-size:clamp(.74rem,3.4vw,.9rem);
+    opacity:.62;margin-top:6px;line-height:1.35;
+    transition:opacity .3s ease;
+  }
+
+  /* ---------- CORAÇÃO ---------- */
+  .heart-area{
+    flex:1;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding-bottom:6vh;
+  }
+
+  .heart-wrapper{
+    position:relative;
+    width:min(66vw,260px);
+    aspect-ratio:1/1;
+    animation:beat var(--beat,2.6s) ease-in-out infinite;
+    filter:
+      drop-shadow(0 12px 26px rgba(0,0,0,.45))
+      drop-shadow(0 0 calc(6px + 34px * var(--glow)) rgba(255,77,141,calc(.18 + .55 * var(--glow))));
+    will-change:transform,filter;
+  }
+  @keyframes beat{
+    0%,100%{transform:scale(1)}
+    28%{transform:scale(1.045)}
+    44%{transform:scale(.995)}
+    60%{transform:scale(1.02)}
+  }
+  .heart-wrapper.done{animation:beat .85s ease-in-out infinite;}
+
+  .heart-svg{width:100%;height:100%;overflow:visible;display:block;}
+
+  .halo{
+    position:absolute;inset:-18%;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(255,77,141,.35) 0%,transparent 62%);
+    opacity:calc(.15 + .85 * var(--glow));
+    pointer-events:none;
+    transition:opacity .2s linear;
+  }
+
+  /* ---------- PLATAFORMA / MESA ---------- */
+  .bench{
+    position:relative;
+    width:100%;
+    max-width:460px;
+    height:clamp(96px,18vh,136px);
+    display:flex;
+    justify-content:flex-end;
+    align-items:flex-end;
+    padding-right:6%;
+    z-index:2;
+  }
+
+  .table{
+    position:relative;
+    width:clamp(120px,36vw,150px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .table-top{
+    width:100%;
+    height:14px;
+    border-radius:10px;
+    background:linear-gradient(180deg,#5d4436 0%,#452f25 55%,#2e1f18 100%);
+    box-shadow:
+      0 3px 0 rgba(0,0,0,.35),
+      0 14px 24px rgba(0,0,0,.45),
+      inset 0 1px 0 rgba(255,225,190,.28);
+  }
+  .legs{width:78%;display:flex;justify-content:space-between;}
+  .leg{
+    width:10px;height:clamp(34px,7vh,52px);
+    background:linear-gradient(90deg,#3d2a20,#563d2f 40%,#2b1d16);
+    border-radius:0 0 4px 4px;
+    box-shadow:inset 0 -6px 10px rgba(0,0,0,.4);
+  }
+  .table-shadow{
+    position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
+    width:118%;height:16px;border-radius:50%;
+    background:radial-gradient(ellipse,rgba(0,0,0,.55),transparent 70%);
+    filter:blur(2px);
+  }
+  #can-shadow{
+    position:fixed;
+    width:56px;height:12px;border-radius:50%;
+    background:radial-gradient(ellipse,rgba(0,0,0,.5),transparent 70%);
+    filter:blur(2px);
+    pointer-events:none;
+    z-index:8;
+    transition:opacity .25s ease;
+  }
+
+  /* ---------- REGADOR ---------- */
+  #can{
+    position:fixed;
+    width:clamp(88px,23vw,110px);
+    aspect-ratio:1/1;
+    z-index:12;
+    cursor:grab;
+    touch-action:none;
+    will-change:left,top;
+  }
+  #can.resting .can-inner{animation:bob 2.8s ease-in-out infinite;}
+  #can.grabbed{cursor:grabbing;}
+  #can.returning{transition:left .45s cubic-bezier(.22,1,.36,1),top .45s cubic-bezier(.22,1,.36,1);}
+
+  .can-inner{
+    position:relative;width:100%;height:100%;
+    transform-origin:42% 64%; /* Eixo no centro da base */
+    transition:transform .24s cubic-bezier(.34,1.3,.64,1);
+    filter:drop-shadow(0 8px 12px rgba(0,0,0,.45));
+  }
+  /* Inclinação para baixo (bico à direita descendo) */
+  #can.pouring .can-inner{transform:rotate(38deg);animation:none;}
+  #can.grabbed .can-inner{animation:none;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+
+  .can-inner svg{width:100%;height:100%;display:block;}
+  .spout{position:absolute;left:90%;top:44%;width:1px;height:1px;}
+
+  /* Dica apontando para baixo em direção ao regador */
+  .pointer-hint{
+    position:fixed;z-index:11;pointer-events:none;
+    font-size:24px;opacity:.9;
+    animation:hintDown 1.5s ease-in-out infinite;
+    transition:opacity .4s ease;
+  }
+  @keyframes hintDown{
+    0%,100%{transform:translateY(0);opacity:.4}
+    50%{transform:translateY(8px);opacity:1}
+  }
+
+  /* ---------- GOTAS ---------- */
+  .droplet{
+    position:fixed;
+    width:6px;height:9px;
+    border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+    background:linear-gradient(180deg,#bdf1ff,#39c0f0);
+    box-shadow:0 0 7px rgba(60,200,255,.75);
+    pointer-events:none;z-index:9;
+    animation:fall var(--dur,.6s) cubic-bezier(.4,0,.9,.6) forwards;
+  }
+  @keyframes fall{
+    0%{transform:translate(0,0) scale(1);opacity:.95}
+    80%{opacity:.9}
+    100%{transform:translate(var(--dx,0px),var(--dy,90px)) scale(.55);opacity:0}
+  }
+
+  .splash{
+    position:fixed;width:5px;height:5px;border-radius:50%;
+    background:#a8ecff;pointer-events:none;z-index:9;
+    animation:splash .5s ease-out forwards;
+  }
+  @keyframes splash{
+    0%{transform:translate(0,0) scale(1);opacity:.9}
+    100%{transform:translate(var(--sx),var(--sy)) scale(.2);opacity:0}
+  }
+
+  /* ---------- BRILHOS FINAIS ---------- */
+  .spark{
+    position:fixed;width:8px;height:8px;border-radius:50%;
+    background:radial-gradient(circle,#fff 0%,var(--rose) 70%,transparent 72%);
+    pointer-events:none;z-index:50;
+    animation:burst .95s ease-out forwards;
+  }
+  @keyframes burst{
+    0%{transform:translate(0,0) scale(.4);opacity:1}
+    100%{transform:translate(var(--bx),var(--by)) scale(1.1);opacity:0}
+  }
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(8,4,15,.84);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    display:flex;align-items:center;justify-content:center;
+    padding:24px;
+    opacity:0;pointer-events:none;
+    transition:opacity .5s ease;
+    z-index:100;
+  }
+  .modal-overlay.active{opacity:1;pointer-events:auto;}
+  .modal-card{
+    background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.05));
+    border:1px solid rgba(255,255,255,.2);
+    padding:30px 24px;border-radius:26px;text-align:center;
+    max-width:360px;width:100%;
+    box-shadow:0 24px 48px rgba(0,0,0,.6);
+    transform:scale(.86) translateY(14px);
+    transition:transform .5s cubic-bezier(.18,.9,.32,1.27);
+  }
+  .modal-overlay.active .modal-card{transform:scale(1) translateY(0);}
+  .modal-card h2{font-size:1.5rem;margin-bottom:14px;color:#ff86a8;}
+  .modal-card p{font-size:1rem;line-height:1.62;color:#ededed;margin-bottom:26px;white-space:pre-line;}
+  .close-btn{
+    background:linear-gradient(135deg,var(--rose),var(--rose-deep));
+    border:none;color:#fff;font-weight:600;
+    padding:14px 30px;border-radius:50px;font-size:.95rem;
+    cursor:pointer;min-height:48px;
+    box-shadow:0 10px 20px rgba(245,0,87,.38);
+    transition:transform .15s ease;
+  }
+  .close-btn:active{transform:scale(.95);}
+
+  @media (prefers-reduced-motion:reduce){
+    .heart-wrapper,#can.resting .can-inner,.star{animation:none!important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="stage">
+  <header>
+    <h1>Regue com carinho</h1>
+    <p id="hint">Arraste o regador da mesinha até o coração</p>
+  </header>
+
+  <!-- CORAÇÃO -->
+  <div class="heart-area">
+    <div class="heart-wrapper" id="heartTarget">
+      <div class="halo"></div>
+      <svg class="heart-svg" viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <clipPath id="heartClip">
+            <path d="M 50,88 C 20,68 5,50 5,30 C 5,14 18,5 33,5 C 41,5 47,10 50,16 C 53,10 59,5 67,5 C 82,5 95,14 95,30 C 95,50 80,68 50,88 Z"/>
+          </clipPath>
+
+          <linearGradient id="waterGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100">
+            <stop offset="0%"  stop-color="#8fe9ff"/>
+            <stop offset="45%" stop-color="#ff6fa5"/>
+            <stop offset="100%" stop-color="#f50057"/>
+          </linearGradient>
+
+          <linearGradient id="glass3D" x1="18%" y1="6%" x2="82%" y2="94%">
+            <stop offset="0%"  stop-color="#ffffff" stop-opacity=".38"/>
+            <stop offset="55%" stop-color="#ffffff" stop-opacity=".05"/>
+            <stop offset="100%" stop-color="#000000" stop-opacity=".42"/>
+          </linearGradient>
+
+          <radialGradient id="innerShade" cx="50%" cy="38%" r="62%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity=".07"/>
+            <stop offset="100%" stop-color="#000000" stop-opacity=".25"/>
+          </radialGradient>
+        </defs>
+
+        <path d="M 50,88 C 20,68 5,50 5,30 C 5,14 18,5 33,5 C 41,5 47,10 50,16 C 53,10 59,5 67,5 C 82,5 95,14 95,30 C 95,50 80,68 50,88 Z"
+              fill="url(#innerShade)"/>
+
+        <g clip-path="url(#heartClip)">
+          <path id="waveBack"  fill="url(#waterGrad)" opacity=".45"/>
+          <path id="waveMain"  fill="url(#waterGrad)"/>
+          <path id="waveLine"  fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1" stroke-linecap="round"/>
+          <g id="bubbles"></g>
+          <ellipse id="shine" cx="34" rx="15" ry="3.2" fill="rgba(255,255,255,.35)" opacity="0"/>
+        </g>
+
+        <path d="M 50,88 C 20,68 5,50 5,30 C 5,14 18,5 33,5 C 41,5 47,10 50,16 C 53,10 59,5 67,5 C 82,5 95,14 95,30 C 95,50 80,68 50,88 Z"
+              fill="url(#glass3D)" stroke="rgba(255,255,255,.4)" stroke-width="1.6"/>
+        <path d="M 22,22 C 26,14 34,11 40,13 C 33,16 28,22 26,30 Z" fill="rgba(255,255,255,.35)"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- MESA COM O REGADOR -->
+  <div class="bench">
+    <div class="table">
+      <div class="table-top" id="tableTop"></div>
+      <div class="legs">
+        <div class="leg"></div>
+        <div class="leg"></div>
+      </div>
+      <div class="table-shadow"></div>
+    </div>
+  </div>
+</div>
+
+<div id="can-shadow"></div>
+<!-- Emoji alterado para apontar para baixo -->
+<div class="pointer-hint" id="pointerHint">👇</div>
+
+<!-- REGADOR -->
+<div id="can" class="resting">
+  <div class="can-inner">
+    <svg viewBox="0 0 80 80" aria-hidden="true">
+      <defs>
+        <linearGradient id="canBody" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#eceff1"/>
+          <stop offset="45%" stop-color="#b0bec5"/>
+          <stop offset="100%" stop-color="#78909c"/>
+        </linearGradient>
+        <linearGradient id="canSpout" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#cfd8dc"/>
+          <stop offset="100%" stop-color="#8b9aa3"/>
+        </linearGradient>
+      </defs>
+      <path d="M 24,36 L 56,36 L 52,66 L 28,66 Z" fill="url(#canBody)" stroke="#607d8b" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M 28,38 L 33,38 L 30.5,64 L 27,64 Z" fill="rgba(255,255,255,.45)"/>
+      <ellipse cx="40" cy="36" rx="16" ry="3.6" fill="#cfd8dc" stroke="#607d8b" stroke-width="1.6"/>
+      <path d="M 24,40 C 8,42 8,62 26,62" fill="none" stroke="#78909c" stroke-width="4" stroke-linecap="round"/>
+      <path d="M 53,50 L 70,36 L 73,40 L 53,56 Z" fill="url(#canSpout)" stroke="#607d8b" stroke-width="1.2" stroke-linejoin="round"/>
+      <ellipse cx="72" cy="37" rx="3.6" ry="6" fill="#455a64" transform="rotate(-25 72 37)"/>
+    </svg>
+    <div class="spout" id="spout"></div>
+  </div>
+</div>
+
+<!-- MENSAGEM FINAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-card">
+    <h2>Obrigado! ✨</h2>
+    <p id="custom-message">Você sempre deixa um coração no meu story, então para retribuir, dedico agora esse coração para você.❤️</p>
+    <button class="close-btn" id="restartBtn">Regar de novo</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  const can         = document.getElementById('can');
+  const canShadow   = document.getElementById('can-shadow');
+  const spout       = document.getElementById('spout');
+  const heart       = document.getElementById('heartTarget');
+  const tableTop    = document.getElementById('tableTop');
+  const modal       = document.getElementById('modal');
+  const hint        = document.getElementById('hint');
+  const pointerHint = document.getElementById('pointerHint');
+  const waveMain    = document.getElementById('waveMain');
+  const waveBack    = document.getElementById('waveBack');
+  const waveLine    = document.getElementById('waveLine');
+  const shine       = document.getElementById('shine');
+  const bubbleG     = document.getElementById('bubbles');
+  const root        = document.documentElement;
+
+  /* ---------- estrelinhas ---------- */
+  (function stars(){
+    const box = document.getElementById('stars');
+    const n = window.innerWidth < 420 ? 26 : 40;
+    let html = '';
+    for(let i=0;i<n;i++){
+      html += `<div class="star" style="left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*70).toFixed(1)}%;animation-delay:${(Math.random()*3).toFixed(2)}s"></div>`;
+    }
+    box.innerHTML = html;
+  })();
+
+  /* ---------- estado ---------- */
+  const EMPTY = 92, FULL = 2;
+  let progress = 0;
+  let shown    = 0;
+  let pouring  = false;
+  let dragging = false;
+  let finished = false;
+  let interacted = false;
+  let lastDrop = 0;
+  let phase = 0;
+  let home = {x:0,y:0};
+
+  /* ---------- posição de descanso ---------- */
+  function computeHome(){
+    const t = tableTop.getBoundingClientRect();
+    const w = can.offsetWidth, h = can.offsetHeight;
+    home.x = t.left + t.width/2 - w/2;
+    home.y = t.top - h*0.74;
+    if(!dragging && !finished) goHome(false);
+    positionHint();
+  }
+  function goHome(animated){
+    can.classList.toggle('returning', !!animated);
+    can.style.left = home.x + 'px';
+    can.style.top  = home.y + 'px';
+    updateShadow();
+    if(animated) setTimeout(()=>can.classList.remove('returning'), 480);
+  }
+  function positionHint(){
+    pointerHint.style.left = (home.x + can.offsetWidth/2 - 12) + 'px';
+    pointerHint.style.top  = (home.y - 36) + 'px';
+  }
+  function updateShadow(){
+    const t = tableTop.getBoundingClientRect();
+    const r = can.getBoundingClientRect();
+    const dist = Math.max(0, Math.min(1, (t.top - r.bottom) / 220));
+    canShadow.style.left = (r.left + r.width/2 - 28 + dist*10) + 'px';
+    canShadow.style.top  = (t.top + 2) + 'px';
+    canShadow.style.transform = `scale(${1 - dist*0.45})`;
+    canShadow.style.opacity = dragging ? (0.5 - dist*0.45) : 0.5;
+  }
+
+  window.addEventListener('resize', computeHome);
+  window.addEventListener('orientationchange', ()=>setTimeout(computeHome,250));
+  window.addEventListener('load', computeHome);
+  computeHome();
+
+  /* ---------- arrastar ---------- */
+  can.addEventListener('pointerdown', e=>{
+    if(finished) return;
+    dragging = true;
+    interacted = true;
+    pointerHint.style.opacity = '0';
+    can.classList.remove('resting','returning');
+    can.classList.add('grabbed');
+    can.setPointerCapture(e.pointerId);
+    moveTo(e);
+    e.preventDefault();
+  });
+
+  can.addEventListener('pointermove', e=>{
+    if(!dragging) return;
+    moveTo(e);
+    e.preventDefault();
+  });
+
+  function release(e){
+    if(!dragging) return;
+    dragging = false;
+    pouring = false;
+    can.classList.remove('grabbed','pouring');
+    if(!finished){
+      can.classList.add('resting');
+      goHome(true);
+      if(progress > 0 && progress < 1) setHint('Quase lá… continue regando 💧');
+    }
+  }
+  can.addEventListener('pointerup', release);
+  can.addEventListener('pointercancel', release);
+
+  function moveTo(e){
+    const w = can.offsetWidth, h = can.offsetHeight;
+    const lift = e.pointerType === 'touch' ? h*0.95 : h*0.5;
+    let x = e.clientX - w/2;
+    let y = e.clientY - lift;
+    x = Math.max(-w*0.15, Math.min(window.innerWidth - w*0.85, x));
+    y = Math.max(-h*0.1,  Math.min(window.innerHeight - h*0.4, y));
+    can.style.left = x + 'px';
+    can.style.top  = y + 'px';
+    updateShadow();
+    checkPouring();
+  }
+
+  /* ---------- detecção de despejo ---------- */
+  function checkPouring(){
+    if(finished){ pouring = false; return; }
+    const r = can.getBoundingClientRect();
+    const h = heart.getBoundingClientRect();
+    
+    // Calcula posição aproximada da ponta do bico
+    const tipX = r.left + r.width * 0.88;
+    const tipY = r.top + r.height * 0.65;
+    
+    const overX = tipX > h.left - h.width*-0.1 && tipX < h.right + h.width*-0.05;
+    const overY = tipY > h.top - h.height*0.85 && tipY < h.top + h.height*0.6;
+    const now = overX && overY;
+
+    if(now !== pouring){
+      pouring = now;
+      can.classList.toggle('pouring', now);
+      if(now) setHint('Encha o coração até o fim');
+    }
+  }
+
+  function setHint(txt){ if(hint.textContent !== txt) hint.textContent = txt; }
+
+  /* ---------- gotas ---------- */
+  function spawnDrop(){
+    const r = can.getBoundingClientRect();
+    const h = heart.getBoundingClientRect();
+    
+    // Ponto exato da saída d'água no bico inclinado
+    const tipLeft = r.left + r.width * 0.88;
+    const tipTop  = r.top + r.height * 0.68;
+    
+    const targetY = h.top + h.height*0.18;
+    const dy = Math.max(45, targetY - tipTop);
+    const d = document.createElement('div');
+    d.className = 'droplet';
+    d.style.left = (tipLeft + (Math.random()*8-4)) + 'px';
+    d.style.top  = tipTop + 'px';
+    d.style.setProperty('--dx', (Math.random()*12-6).toFixed(1)+'px');
+    d.style.setProperty('--dy', dy.toFixed(0)+'px');
+    const dur = Math.min(0.75, 0.28 + dy/900);
+    d.style.setProperty('--dur', dur+'s');
+    document.body.appendChild(d);
+    setTimeout(()=>{ d.remove(); splash(tipLeft, tipTop + dy); }, dur*1000);
+  }
+
+  function splash(x,y){
+    for(let i=0;i<2;i++){
+      const s = document.createElement('div');
+      s.className = 'splash';
+      s.style.left = x+'px'; s.style.top = y+'px';
+      s.style.setProperty('--sx', (Math.random()*30-15).toFixed(0)+'px');
+      s.style.setProperty('--sy', (-10-Math.random()*14).toFixed(0)+'px');
+      document.body.appendChild(s);
+      setTimeout(()=>s.remove(), 500);
+    }
+  }
+
+  /* ---------- bolhas ---------- */
+  const bubbles = [];
+  const MAX_BUBBLES = window.innerWidth < 420 ? 8 : 12;
+  function spawnBubble(level){
+    if(bubbles.length >= MAX_BUBBLES) return;
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    const r = 0.8 + Math.random()*1.6;
+    c.setAttribute('r', r.toFixed(2));
+    c.setAttribute('fill','rgba(255,255,255,.55)');
+    const b = {el:c, x: 18 + Math.random()*64, y: 95, r, sp: 0.25 + Math.random()*0.45, w: Math.random()*Math.PI*2};
+    c.setAttribute('cx', b.x); c.setAttribute('cy', b.y);
+    bubbleG.appendChild(c);
+    bubbles.push(b);
+  }
+  function updateBubbles(level, dt){
+    for(let i=bubbles.length-1;i>=0;i--){
+      const b = bubbles[i];
+      b.y -= b.sp * dt * 26;
+      b.w += dt*3;
+      b.el.setAttribute('cy', b.y.toFixed(2));
+      b.el.setAttribute('cx', (b.x + Math.sin(b.w)*1.6).toFixed(2));
+      b.el.setAttribute('opacity', Math.max(0, Math.min(.7, (b.y - level)/12)).toFixed(2));
+      if(b.y < level + 1){ b.el.remove(); bubbles.splice(i,1); }
+    }
+  }
+
+  /* ---------- ondas ---------- */
+  function wavePath(level, amp, len, ph){
+    let d = 'M -12 ' + (level + amp*Math.sin(ph)).toFixed(2);
+    for(let x=-6; x<=112; x+=6){
+      const y = level + amp*Math.sin(x/len + ph) + amp*0.35*Math.sin(x/(len*0.45) + ph*1.7);
+      d += ' L ' + x + ' ' + y.toFixed(2);
+    }
+    return d;
+  }
+  function closedWave(level, amp, len, ph){
+    return wavePath(level, amp, len, ph) + ' L 112 104 L -12 104 Z';
+  }
+
+  /* ---------- loop principal ---------- */
+  let last = performance.now();
+  let amp = 1.1;
+  function frame(now){
+    const dt = Math.min(0.05, (now - last)/1000);
+    last = now;
+    phase += dt * 1.9;
+
+    if(pouring && !finished){
+      progress = Math.min(1, progress + dt*0.17);
+      if(now - lastDrop > 60){ spawnDrop(); lastDrop = now; }
+      if(Math.random() < dt*9) spawnBubble();
+      if(progress >= 1) complete();
+    }
+
+    shown += (progress - shown) * Math.min(1, dt*6);
+    const level = EMPTY - (EMPTY - FULL) * shown;
+    const target = pouring ? 2.6 : (finished ? 0.7 : 1.1);
+    amp += (target - amp) * Math.min(1, dt*3);
+
+    waveMain.setAttribute('d', closedWave(level, amp, 13, phase));
+    waveBack.setAttribute('d', closedWave(level + 1.6, amp*0.8, 9, -phase*1.35 + 1.2));
+    waveLine.setAttribute('d', wavePath(level, amp, 13, phase));
+    waveLine.setAttribute('opacity', shown > 0.02 ? 0.55 : 0);
+
+    shine.setAttribute('cy', (level + 2.4).toFixed(2));
+    shine.setAttribute('opacity', shown > 0.05 ? (0.28 - amp*0.03).toFixed(2) : 0);
+
+    updateBubbles(level, dt);
+
+    root.style.setProperty('--glow', shown.toFixed(3));
+    heart.style.setProperty('--beat', (2.6 - shown*1.2).toFixed(2) + 's');
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* ---------- conclusão ---------- */
+  function complete(){
+    if(finished) return;
+    finished = true;
+    pouring = false;
+    dragging = false;
+    can.classList.remove('pouring','grabbed');
+    can.classList.add('resting');
+    goHome(true);
+    heart.classList.add('done');
+    setHint('Coração cheinho 💗');
+    burst();
+    setTimeout(()=>modal.classList.add('active'), 850);
+  }
+
+  function burst(){
+    const r = heart.getBoundingClientRect();
+    const cx = r.left + r.width/2, cy = r.top + r.height/2;
+    const n = window.innerWidth < 420 ? 14 : 20;
+    for(let i=0;i<n;i++){
+      const s = document.createElement('div');
+      s.className = 'spark';
+      const a = (Math.PI*2*i)/n + Math.random()*0.4;
+      const dist = 70 + Math.random()*90;
+      s.style.left = cx+'px'; s.style.top = cy+'px';
+      s.style.setProperty('--bx', (Math.cos(a)*dist).toFixed(0)+'px');
+      s.style.setProperty('--by', (Math.sin(a)*dist).toFixed(0)+'px');
+      s.style.animationDelay = (Math.random()*0.15)+'s';
+      document.body.appendChild(s);
+      setTimeout(()=>s.remove(), 1200);
+    }
+  }
+
+  /* ---------- reiniciar ---------- */
+  document.getElementById('restartBtn').addEventListener('click', ()=>{
+    modal.classList.remove('active');
+    finished = false;
+    progress = 0;
+    heart.classList.remove('done');
+    setHint('Arraste o regador da mesinha até o coração');
+    bubbles.forEach(b=>b.el.remove());
+    bubbles.length = 0;
+    computeHome();
+    pointerHint.style.opacity = '';
+  });
+
+  document.addEventListener('gesturestart', e=>e.preventDefault());
+  let lastTouch = 0;
+  document.addEventListener('touchend', e=>{
+    const t = Date.now();
+    if(t - lastTouch < 320) e.preventDefault();
+    lastTouch = t;
+  }, {passive:false});
+
+  setTimeout(()=>{ if(!interacted) pointerHint.style.opacity = '.9'; }, 400);
+})();
+</script>
+</body>
+</html>
